@@ -1,0 +1,22 @@
+name: CI Test
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # adds a "Run workflow" button in the Actions tab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Confirm it triggered
+        run: echo "Pipeline running for commit ${{ github.sha }}"
+
+      - name: Build Docker image (no push)
+        run: docker build -t my-app:${{ github.sha }} .
+
+      - name: Confirm image built
+        run: docker images my-app
